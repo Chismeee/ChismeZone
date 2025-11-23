@@ -1,272 +1,272 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>Chismes</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Chismes — Neon</title>
 
 <style>
-  body {
-    margin: 0;
-    background: #0d0f15;
-    font-family: Arial, sans-serif;
-    color: #fff;
+  :root{
+    --bg:#0d0f15;
+    --card-bg: linear-gradient(circle at top left, #1a1c25 0%, #0c0d12 100%);
+    --neon-pink: #ff2ea6;
+    --neon-purple: #b832ff;
+    --accent: #ff2c7d;
+    --muted:#d8d8e0;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--muted);
+    font-family:Inter, "Segoe UI", Arial, sans-serif;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    padding-bottom:40px;
+  }
+
+  h1{
+    text-align:center;
+    color:var(--neon-pink);
+    text-shadow:0 0 10px var(--neon-pink);
+    margin:20px 0 8px;
+    font-weight:600;
+  }
+  h2{
+    text-align:center;
+    color:var(--neon-purple);
+    margin:8px 0 18px;
+    font-weight:500;
   }
 
   /* FORM */
-  .chisme-form {
-    display: flex;
-    gap: 10px;
-    padding: 15px;
-    background: #11131c;
-    border-top: 2px solid #ff2c7d;
-    align-items: center;
-    flex-wrap: wrap;
+  .chisme-form{
+    width:95%;
+    max-width:1200px;
+    margin: 0 auto 22px;
+    display:flex;
+    gap:12px;
+    padding:14px;
+    background:#0f1116;
+    border-top:3px solid var(--accent);
+    border-radius:12px;
+    align-items:center;
+    flex-wrap:wrap;
+  }
+  .input-box{
+    padding:10px;
+    border-radius:10px;
+    background:#0b0d12;
+    border:1px solid rgba(123,44,191,0.25);
+    color:white;
+  }
+  .xat-input{ width:170px; min-width:120px; }
+  .chisme-input{ flex:1; min-width:260px; height:110px; resize:vertical; font-size:15px; }
+  .add-screenshot{ width:40px; height:40px; border-radius:8px; border:none; background:var(--accent); color:#fff; font-size:22px; cursor:pointer; }
+  .add-btn{ padding:10px 18px; background:var(--accent); border:none; border-radius:10px; color:white; cursor:pointer; font-weight:700; }
+
+  /* WRAPPER */
+  .chismes-wrapper{
+    width:95%;
+    max-width:1200px;
+    margin: 10px auto 40px;
+    padding:20px;
+    background:var(--card-bg);
+    border:3px solid var(--neon-pink);
+    border-radius:18px;
+    box-shadow: 0 0 25px var(--neon-pink), inset 0 0 15px #b832ff55;
+    max-height:520px;
+    overflow-y:auto;
+  }
+  .chismes-wrapper::-webkit-scrollbar{ width:10px }
+  .chismes-wrapper::-webkit-scrollbar-thumb{ background:var(--neon-pink); border-radius:10px }
+
+  #listaChismes{ display:flex; flex-direction:column; gap:12px; padding-right:8px; }
+
+  /* CARD */
+  .chisme-card{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    background:var(--card-bg);
+    border:3px solid var(--neon-pink);
+    border-radius:18px;
+    box-shadow: 0 0 15px var(--neon-pink), inset 0 0 10px #b832ff55;
+    padding:16px;
+    transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .chisme-card:hover{ transform:scale(1.02); box-shadow:0 0 28px var(--neon-pink), inset 0 0 15px #b832ff88; }
+
+  .chisme-icon{
+    width:84px; height:84px; border-radius:50%;
+    background:linear-gradient(145deg,var(--neon-pink),var(--neon-purple));
+    display:flex; align-items:center; justify-content:center;
+    font-size:38px; color:white;
+    box-shadow:0 0 18px var(--neon-pink), inset 0 0 10px #ffffff33;
+    flex-shrink:0;
   }
 
-  .input-box {
-    padding: 10px;
-    border-radius: 10px;
-    background: #0b0d12;
-    border: 1px solid #7b2cbf;
-    color: white;
+  .chisme-texto{ flex:1; font-size:15px; color:var(--muted); line-height:1.5; word-break:break-word; }
+  .chisme-texto strong{ color:var(--neon-pink); font-size:15.5px; display:block; margin-bottom:4px; }
+
+  .btn-ver{
+    background:transparent;
+    border:3px solid var(--neon-purple);
+    color:var(--neon-purple);
+    padding:12px 20px;
+    border-radius:14px;
+    font-weight:700;
+    cursor:pointer;
+    box-shadow:0 0 10px #b832ff55;
+    transition:transform .14s ease, background .14s ease, color .14s ease;
   }
-
-  .xat-input { width: 150px; }
-  .chisme-input { width: 650px; height: 120px; font-size: 16px; }
-  .url-input { width: 230px; font-size: 12px; }
-
-  .add-screenshot {
-    width: 35px;
-    height: 35px;
-    border-radius: 8px;
-    border: none;
-    background: #ff2c7d;
-    font-size: 22px;
-    cursor: pointer;
-  }
-
-  .remove-cap {
-    width: 35px;
-    height: 35px;
-    border-radius: 8px;
-    border: none;
-    background: #333;
-    color: #fff;
-    font-weight: bold;
-    cursor: pointer;
-  }
-
-  .add-btn {
-    padding: 10px 20px;
-    background: #ff2c7d;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    color: white;
-    font-weight: bold;
-  }
-
-  h1 {
-    text-align: center;
-    margin-top: 20px;
-    color: #ff2ea6;
-    text-shadow: 0 0 12px #ff2ea6;
-  }
-
-  /* CAIXA NEON COM SCROLL PARA CHISMES ANTIGOS */
-  .chismes-wrapper {
-    width: 95%;
-    margin: 0 auto;
-    padding: 20px;
-
-    background: radial-gradient(circle at top left, #1a1c25 0%, #0c0d12 100%);
-    border: 3px solid #ff2ea6;
-    border-radius: 25px;
-
-    box-shadow:
-      0 0 25px #ff2ea6,
-      inset 0 0 15px #b832ff55;
-
-    height: 500px !important;
-    max-height: 500px !important;
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
-  }
-
-  /* Scroll estilizado */
-  .chismes-wrapper::-webkit-scrollbar {
-    width: 10px;
-  }
-
-  .chismes-wrapper::-webkit-scrollbar-thumb {
-    background: #ff2ea6;
-    border-radius: 10px;
-  }
-
-  .chismes-wrapper::-webkit-scrollbar-track {
-    background: #0c0d12;
-  }
-
-  #listaChismes {
-    padding-right: 10px;
-    display: block;
-    width: 100%;
-  }
-
-  /* CARDS */
-  .chisme-card {
-    display: flex;
-    align-items: center;
-    gap: 22px;
-    background: radial-gradient(circle at top left, #1a1c25 0%, #0c0d12 100%);
-    border: 3px solid #ff2ea6;
-    border-radius: 25px;
-    box-shadow: 0 0 15px #ff2ea6, inset 0 0 10px #b832ff55;
-    padding: 20px;
-    margin: 18px 10px;
-    transition: 0.25s ease-in-out;
-  }
-
-  .chisme-card:hover {
-    transform: scale(1.02);
-    box-shadow: 0 0 25px #ff2ea6, inset 0 0 15px #b832ff88;
-  }
-
-  .chisme-icon {
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-    background: linear-gradient(145deg, #ff2ea6, #b832ff);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 46px;
-    color: white;
-    box-shadow: 0 0 18px #ff2ea6, inset 0 0 12px #ffffff44;
-  }
-
-  .chisme-texto {
-    flex: 1;
-    color: white;
-    font-size: 16px;
-    line-height: 1.4;
-  }
-
-  .chisme-texto strong {
-    color: #ff2ea6;
-    font-size: 17px;
-  }
-
-  .btn-ver {
-    background: transparent;
-    border: 3px solid #b832ff;
-    color: #b832ff;
-    padding: 14px 26px;
-    border-radius: 18px;
-    font-size: 17px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s ease;
-    box-shadow: 0 0 12px #b832ff55;
-  }
-
-  .btn-ver:hover {
-    background: #b832ff;
-    color: white;
-    box-shadow: 0 0 22px #b832ff;
-    transform: scale(1.05);
-  }
+  .btn-ver:hover{ background:var(--neon-purple); color:#fff; transform:scale(1.04); box-shadow:0 0 22px var(--neon-purple) }
 
   /* MODAL */
-  .modal-bg {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.6);
-    display: none;
-    justify-content: center;
-    align-items: center;
+  .modal-bg{
+    position:fixed; inset:0;
+    display:none;
+    background:rgba(0,0,0,0.6);
+    justify-content:center; align-items:center;
+    padding:20px;
+    z-index:999;
+  }
+  .modal{
+    width:92%;
+    max-width:720px;
+    background:#0e0f14;
+    border-radius:14px;
+    padding:18px;
+    border:1px solid var(--accent);
+    box-shadow:0 0 32px #ff2c7d;
+    max-height:85vh;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .modal-top{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .modal h3{ margin:0; color:var(--neon-pink); text-shadow:0 0 8px var(--neon-pink) }
+  .close-modal{ cursor:pointer; color:var(--accent); font-size:22px; border:none; background:transparent; }
+
+  /* modal content area (scroll) */
+  .modal-body{
+    overflow-y:auto;
+    padding-right:8px;
+    max-height:60vh; /* enough for long text + captures */
+  }
+  .modal-body::-webkit-scrollbar{ width:10px }
+  .modal-body::-webkit-scrollbar-thumb{ background:var(--neon-purple); border-radius:10px }
+
+  #modal-chisme{
+    white-space:pre-wrap; /* preserve line breaks */
+    color:var(--muted);
+    font-size:15px;
+    line-height:1.6;
+    margin-bottom:10px;
   }
 
-  .modal {
-    background: #11131c;
-    width: 480px;
-    padding: 20px;
-    border-radius: 15px;
-    border: 1px solid #ff2c7d;
+  /* CAPTURAS: each link stacked vertically and neon style */
+  #modal-capturas{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    margin-top:6px;
+  }
+  #modal-capturas a{
+    display:block;
+    text-decoration:none;
+    padding:10px 12px;
+    border-radius:10px;
+    border:2px solid rgba(184,50,255,0.18);
+    background:linear-gradient(90deg, rgba(255,46,166,0.03), rgba(184,50,255,0.02));
+    color:var(--neon-pink);
+    font-weight:700;
+    box-shadow:0 0 10px rgba(184,50,255,0.06);
+    word-break:break-word;
+  }
+  #modal-capturas a:hover{
+    transform:translateY(-2px);
+    box-shadow:0 6px 20px rgba(184,50,255,0.14);
   }
 
-  .close-modal {
-    float: right;
-    cursor: pointer;
-    font-size: 22px;
-    color: #ff2c7d;
-  }
-
-  .capture-row {
-    display: flex;
-    gap: 6px;
-    align-items: center;
+  /* responsive tweaks */
+  @media (max-width:700px){
+    .chisme-icon{ width:64px; height:64px; font-size:30px }
+    .btn-ver{ padding:10px 14px; font-size:14px }
+    .chisme-input{ height:90px }
   }
 </style>
 </head>
 <body>
 
-<h1>😱🔥 Chisme del Día</h1>
-<div id="chismeDiaContainer"></div>
+  <h1>😱🔥 Chisme del Día</h1>
+  <h2>¡Todo neon y bonito!</h2>
 
-<h1>📚 Chismes Antiguos</h1>
+  <div id="chismeDiaContainer" style="width:95%;max-width:1200px;margin:0 auto 12px;"></div>
 
-<!-- AQUI ESTÁ A CAIXA COM SCROLL -->
-<div class="chismes-wrapper">
-  <div id="listaChismes"></div>
-</div>
-
-<!-- FORM -->
-<div class="chisme-form">
-  <input class="input-box xat-input" id="xat" placeholder="¿Chisme de cuál xat?">
-  <textarea class="input-box chisme-input" id="chisme" placeholder="Escribe tu chisme..."></textarea>
-
-  <div id="capturas-container" style="display:flex; gap:10px; flex-wrap:wrap;"></div>
-
-  <button class="add-screenshot" id="add-cap">+</button>
-  <button class="add-btn" id="add">Añadir Chisme</button>
-</div>
-
-<!-- MODAL -->
-<div class="modal-bg" id="modal">
-  <div class="modal">
-    <span class="close-modal" onclick="closeModal()">×</span>
-    <h3 id="modal-xat"></h3>
-    <p id="modal-chisme"></p>
-    <div id="modal-capturas"></div>
+  <h2 style="margin-top:2px;color:var(--neon-pink)">📚 Chismes Antiguos</h2>
+  <div class="chismes-wrapper">
+    <div id="listaChismes"></div>
   </div>
-</div>
+
+  <!-- FORM -->
+  <div class="chisme-form" role="form" aria-label="Form para chismes">
+    <input class="input-box xat-input" id="xat" placeholder="¿Chisme de cuál xat?" />
+    <textarea class="input-box chisme-input" id="chisme" placeholder="Escribe tu chisme..."></textarea>
+
+    <div id="capturas-container" style="display:flex; gap:10px; flex-wrap:wrap;"></div>
+
+    <button class="add-screenshot" id="add-cap" title="Añadir campo de captura">+</button>
+    <button class="add-btn" id="add" title="Añadir chisme">Añadir Chisme</button>
+  </div>
+
+  <!-- MODAL -->
+  <div class="modal-bg" id="modal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-xat">
+      <div class="modal-top">
+        <h3 id="modal-xat"></h3>
+        <button class="close-modal" id="closeBtn" aria-label="Cerrar modal">×</button>
+      </div>
+      <div class="modal-body">
+        <div id="modal-chisme"></div>
+        <div id="modal-capturas"></div>
+      </div>
+    </div>
+  </div>
 
 <script>
-/* ——— TODO O SEU JS (NÃO ALTERADO) ——— */
-/* Copiado exatamente igual ao que você mandou */
+/* ===== util: extrai urls do texto (funciona quando vários links estão na mesma linha separados por espaços) ===== */
+function extractUrls(text){
+  if(!text) return [];
+  // regex simples para detectar http/https links
+  const urlRegex = /https?:\/\/[^\s]+/g;
+  const matches = text.match(urlRegex);
+  return matches ? matches.map(s => s.trim()) : [];
+}
 
-const capturasContainer = document.getElementById("capturas-container");
+/* ===== elementos ===== */
+const lista = document.getElementById('listaChismes');
+const chismeDiaContainer = document.getElementById('chismeDiaContainer');
+const capturasContainer = document.getElementById('capturas-container');
 
-function addCaptureInput(value = "") {
-  const wrapper = document.createElement("div");
-  wrapper.className = "capture-row";
+function createCaptureInput(value=''){
+  const wrapper = document.createElement('div');
+  wrapper.style.display = 'flex';
+  wrapper.style.gap = '6px';
+  wrapper.style.alignItems = 'center';
 
-  const input = document.createElement("input");
-  input.className = "input-box url-input";
-  input.placeholder = "URL de captura (opcional)";
+  const input = document.createElement('input');
+  input.className = 'input-box url-input';
+  input.placeholder = 'URL de captura (opcional)';
   input.value = value;
 
-  const btn = document.createElement("button");
-  btn.type = "button";
-  btn.className = "remove-cap";
-  btn.textContent = "−";
-
-  btn.onclick = () => {
-    wrapper.remove();
-    salvar();
-  };
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'remove-cap';
+  btn.textContent = '−';
+  btn.onclick = () => wrapper.remove();
 
   wrapper.appendChild(input);
   wrapper.appendChild(btn);
@@ -274,140 +274,132 @@ function addCaptureInput(value = "") {
   return input;
 }
 
-function salvar() {
-  localStorage.setItem("chismeDia", document.getElementById("chismeDiaContainer").innerHTML);
-  localStorage.setItem("chismesAntigos", document.getElementById("listaChismes").innerHTML);
+/* start com um campo */
+createCaptureInput();
+document.getElementById('add-cap').onclick = () => createCaptureInput();
 
-  const values = [...capturasContainer.querySelectorAll("input")].map(i => i.value);
-  localStorage.setItem("formCapturas", JSON.stringify(values));
-}
+/* ===== modal open/close ===== */
+const modalBg = document.getElementById('modal');
+const modalXat = document.getElementById('modal-xat');
+const modalChisme = document.getElementById('modal-chisme');
+const modalCapturas = document.getElementById('modal-capturas');
+document.getElementById('closeBtn').onclick = closeModal;
 
-function attachListeners() {
-  document.querySelectorAll(".btn-ver").forEach(btn => {
-    btn.onclick = () => {
-      const card = btn.closest(".chisme-card");
-      const strong = card.querySelector(".chisme-texto strong");
-      let xat = strong ? strong.textContent : "Xat desconocido";
+function openModal(xat, chismeText, captures){
+  modalXat.textContent = xat ? `Xat: ${xat}` : 'Xat: Desconocido';
+  modalChisme.textContent = chismeText || '';
 
-      const textoEl = card.querySelector(".chisme-texto");
-      let texto = textoEl ? textoEl.innerText.replace(xat, "").trim() : "";
+  // limpa area de capturas
+  modalCapturas.innerHTML = '';
 
-      const links = [...card.querySelectorAll("a")].map(a => a.href);
-      openModal(xat, texto, links);
-    };
-  });
-}
+  // Se capturas já vierem como array, use; se não, extrai do texto também
+  let urls = Array.isArray(captures) ? captures.slice() : [];
+  // também extraímos urls do texto (cobre o caso links inline)
+  urls = urls.concat(extractUrls(chismeText));
+  // dedup e filter
+  urls = Array.from(new Set(urls.filter(u => !!u)));
 
-function carregar() {
-  const dia = localStorage.getItem("chismeDia");
-  const antigos = localStorage.getItem("chismesAntigos");
-
-  if (dia) document.getElementById("chismeDiaContainer").innerHTML = dia;
-  if (antigos) document.getElementById("listaChismes").innerHTML = antigos;
-
-  const savedCapturas = JSON.parse(localStorage.getItem("formCapturas") || "[]");
-  if (savedCapturas.length > 0) {
-    capturasContainer.innerHTML = "";
-    savedCapturas.forEach(v => addCaptureInput(v));
+  if(urls.length === 0){
+    const no = document.createElement('div');
+    no.innerHTML = "<em style='color:var(--accent)'>Sin capturas</em>";
+    modalCapturas.appendChild(no);
   } else {
-    if (capturasContainer.children.length === 0) addCaptureInput();
+    // cada link em uma linha — estilizado
+    urls.forEach(u => {
+      const a = document.createElement('a');
+      a.href = u;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.textContent = u;
+      modalCapturas.appendChild(a);
+    });
   }
 
-  attachListeners();
+  modalBg.style.display = 'flex';
+  modalBg.setAttribute('aria-hidden','false');
 }
 
-carregar();
+/* fechar ao clicar fora do modal interno */
+modalBg.addEventListener('click', (e) => {
+  if(e.target === modalBg) closeModal();
+});
+function closeModal(){
+  modalBg.style.display = 'none';
+  modalBg.setAttribute('aria-hidden','true');
+}
 
-document.getElementById("add-cap").onclick = () => {
-  addCaptureInput();
-  salvar();
-};
+/* fechar com ESC */
+document.addEventListener('keydown', (e) => {
+  if(e.key === 'Escape' && modalBg.style.display === 'flex') closeModal();
+});
 
-function criarCard(xat, msg, capturas) {
-  let card = document.createElement("div");
-  card.className = "chisme-card";
+/* ===== adicionar chisme (cria card) ===== */
+document.getElementById('add').onclick = () => {
+  const xat = document.getElementById('xat').value.trim() || 'Xat desconocido';
+  const chismeText = document.getElementById('chisme').value.trim();
 
-  const capturasHtml = (capturas && capturas.length)
-    ? capturas.map(url => `<a href="${escapeHtml(url)}" target="_blank" style="display:none">${escapeHtml(url)}</a>`).join("")
-    : "";
+  if(!chismeText){
+    alert('Escribe un chisme.');
+    return;
+  }
+
+  // capturas manuais (campos do form)
+  const manualCapturas = [...capturasContainer.querySelectorAll('input')]
+    .map(i => i.value.trim())
+    .filter(v => v.length>0);
+
+  // cria card
+  const card = document.createElement('div');
+  card.className = 'chisme-card';
+
+  // icone por default (poderia usar categorias se quiser)
+  const icon = '💬';
+
+  // gerar um preview curto para o card (mostra trecho + se houver links, dá um aviso)
+  const detectedLinks = extractUrls(chismeText);
+  let previewText = chismeText.length > 120 ? chismeText.slice(0,120) + '…' : chismeText;
+  if(detectedLinks.length > 0 && previewText.indexOf(detectedLinks[0]) === -1){
+    // se os links não aparecem no preview (cortado), não precisamos alterar; apenas informação visual mantida no modal
+  }
 
   card.innerHTML = `
-    <div class="chisme-icon">💬</div>
+    <div class="chisme-icon">${icon}</div>
     <div class="chisme-texto">
-      <strong>${escapeHtml(xat) || "Xat desconocido"}</strong><br>
-      ${escapeHtml(msg.length > 80 ? msg.slice(0, 80) + "..." : msg)}
-      ${capturasHtml}
+      <strong>${escapeHtml(xat)}</strong>
+      <div>${escapeHtml(previewText)}</div>
     </div>
     <button class="btn-ver">Visualizar</button>
   `;
 
-  card.querySelector(".btn-ver").onclick = () => openModal(xat, msg, capturas);
-  return card;
-}
+  // abrir modal completo ao clicar
+  card.querySelector('.btn-ver').onclick = () => openModal(xat, chismeText, manualCapturas);
 
-document.getElementById("add").onclick = () => {
-  let xat = document.getElementById("xat").value;
-  let msg = document.getElementById("chisme").value;
+  // adiciona ao topo da lista
+  lista.prepend(card);
 
-  if (msg.trim() === "") return alert("Escribe un chisme.");
+  // também define como chisme do dia (substitui)
+  chismeDiaContainer.innerHTML = '';
+  const cardClone = card.cloneNode(true);
+  // adaptamos botão do clone pra abrir modal com os mesmos dados
+  cardClone.querySelector('.btn-ver').onclick = () => openModal(xat, chismeText, manualCapturas);
+  chismeDiaContainer.appendChild(cardClone);
 
-  const capturas = [...capturasContainer.querySelectorAll("input")]
-    .map(i => i.value)
-    .filter(v => v.trim() !== "");
-
-  let card = criarCard(xat, msg, capturas);
-
-  let atual = document.getElementById("chismeDiaContainer").firstChild;
-  if (atual) document.getElementById("listaChismes").prepend(atual);
-
-  document.getElementById("chismeDiaContainer").innerHTML = "";
-  document.getElementById("chismeDiaContainer").appendChild(card);
-
-  document.getElementById("xat").value = "";
-  document.getElementById("chisme").value = "";
-  capturasContainer.innerHTML = "";
-  addCaptureInput();
-
-  salvar();
-  attachListeners();
+  // limpa inputs
+  document.getElementById('xat').value = '';
+  document.getElementById('chisme').value = '';
+  capturasContainer.innerHTML = '';
+  createCaptureInput();
 };
 
-function openModal(xat, chisme, capturas) {
-  document.getElementById("modal-xat").textContent = "Xat: " + (xat || "Xat desconocido");
-  document.getElementById("modal-chisme").textContent = chisme;
-
-  let area = document.getElementById("modal-capturas");
-  area.innerHTML = "";
-
-  if (!capturas || capturas.length === 0) {
-    area.innerHTML = "<em style='color:#ff2c7d'>Sin capturas</em>";
-  } else {
-    capturas.forEach(url => {
-      const a = document.createElement("a");
-      a.href = url;
-      a.target = "_blank";
-      a.textContent = url;
-      a.style.color = "#ff2c7d";
-      a.style.display = "block";
-      area.appendChild(a);
-    });
-  }
-
-  document.getElementById("modal").style.display = "flex";
-}
-
-function closeModal() {
-  document.getElementById("modal").style.display = "none";
-}
-
-function escapeHtml(str) {
-  if (!str) return "";
+/* ===== small helper: escapeHtml para segurança ===== */
+function escapeHtml(str){
+  if(!str) return '';
   return String(str)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
+    .replaceAll('"','&quot;')
+    .replaceAll("'",'&#039;');
 }
 </script>
 
