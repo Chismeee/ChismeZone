@@ -7,10 +7,10 @@ document.getElementById("postar").onclick = function() {
     if (msg.trim() === "" || nome.trim() === "") return;
 
     const icones = {
-        Adulterio: "💋",
-       Pelea: "⚡",
-        Atencion: "❗",
-        chismes: "💬"
+        romance: "💋",
+        Pelea: "⚡",
+        aVISO: "❗",
+        Chisme: "💬"
     };
 
     let card = document.createElement("div");
