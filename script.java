@@ -8,9 +8,9 @@ document.getElementById("postar").onclick = function() {
 
     const icones = {
         romance: "💋",
-        Pelea: "⚡",
-        aVISO: "❗",
-        Chisme: "💬"
+        treta: "⚡",
+        alerta: "❗",
+        fofoca: "💬"
     };
 
     let card = document.createElement("div");
@@ -27,7 +27,10 @@ document.getElementById("postar").onclick = function() {
         <button class="btn-ver">Visualizar</button>
     `;
 
-    document.getElementById("listaChismes").appendChild(card);
+    const lista = document.getElementById("listaChismes");
+    lista.appendChild(card);
 
     document.getElementById("mensagem").value = "";
+
+    lista.scrollTop = lista.scrollHeight; // 🔥 MANTÉM VISÍVEL SEMPRE!
 };
