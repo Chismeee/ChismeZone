@@ -84,3 +84,64 @@
     box-shadow: 0 0 22px #b832ff;
     transform: scale(1.05);
 }
+
+/* CAIXA NEON ONDE OS CHISMES FICAM */
+.chismes-box {
+    width: 95%;
+    margin: 0 auto;
+    padding: 20px;
+
+    background: radial-gradient(circle at top left, #1a1c25 0%, #0c0d12 100%);
+    border: 3px solid #ff2ea6;
+    border-radius: 25px;
+
+    box-shadow:
+        0 0 25px #ff2ea6,
+        inset 0 0 15px #b832ff55;
+
+    max-height: 500px;         /* altura fixa */
+    overflow-y: auto;          /* scroll vertical */
+    overflow-x: hidden;        /* sem scroll lateral */
+    scroll-behavior: smooth;
+}
+
+/* 🔥 CAIXA NEON COM SCROLL PARA OS CHISMES 🔥 */
+.chismes-box {
+    width: 95%;
+    margin: 0 auto;
+    padding: 20px;
+
+    background: radial-gradient(circle at top left, #1a1c25 0%, #0c0d12 100%);
+    border: 3px solid #ff2ea6;
+    border-radius: 25px;
+
+    box-shadow:
+        0 0 25px #ff2ea6,
+        inset 0 0 15px #b832ff55;
+
+    max-height: 500px;     /* Altura fixa */
+    overflow-y: auto;      /* Scroll vertical */
+    overflow-x: hidden;
+}
+
+/* 🔥 CAIXA NEON COM SCROLL PARA OS CHISMES 🔥 */
+.chismes-box {
+    width: 95%;
+    margin: 0 auto;
+    padding: 20px;
+
+    background: radial-gradient(circle at top left, #1a1c25 0%, #0c0d12 100%);
+    border: 3px solid #ff2ea6;
+    border-radius: 25px;
+
+    box-shadow:
+        0 0 25px #ff2ea6,
+        inset 0 0 15px #b832ff55;
+
+    max-height: 500px;     /* Altura fixa */
+    overflow-y: auto;      /* Scroll vertical */
+    overflow-x: hidden;
+}
+
+
+
