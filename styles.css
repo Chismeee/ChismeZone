@@ -1,0 +1,86 @@
+/* CARD DE CHISME ESTILIZADO */
+.chisme-card {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+
+    /* Fundo escuro com leve textura */
+    background: radial-gradient(circle at top left, #1a1c25 0%, #0c0d12 100%);
+    
+    /* Borda neon estilo da arte */
+    border: 3px solid #ff2ea6;
+    border-radius: 25px;
+
+    /* Brilho neon */
+    box-shadow:
+        0 0 15px #ff2ea6,
+        inset 0 0 10px #b832ff55;
+
+    padding: 20px;
+    margin-bottom: 18px;
+    transition: 0.25s ease-in-out;
+}
+
+/* HOVER — efeito brilhando mais ainda */
+.chisme-card:hover {
+    transform: scale(1.02);
+    box-shadow:
+        0 0 25px #ff2ea6,
+        inset 0 0 15px #b832ff88;
+}
+
+/* ÍCONE CATEGORIA GRANDE */
+.chisme-icon {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+
+    background: linear-gradient(145deg, #ff2ea6, #b832ff);
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 46px;
+    color: white;
+
+    /* Glow neon */
+    box-shadow:
+        0 0 18px #ff2ea6,
+        inset 0 0 12px #ffffff44;
+}
+
+/* TEXTO */
+.chisme-texto {
+    flex: 1;
+    color: white;
+    font-size: 16px;
+    line-height: 1.4;
+}
+
+.chisme-texto strong {
+    color: #ff2ea6;
+    font-size: 17px;
+}
+
+/* BOTÃO VISUALIZAR — AGORA GRANDE E NEON */
+.btn-ver {
+    background: transparent;
+    border: 3px solid #b832ff;
+    color: #b832ff;
+    padding: 14px 26px;
+    border-radius: 18px;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+
+    transition: 0.3s ease;
+    box-shadow: 0 0 12px #b832ff55;
+}
+
+.btn-ver:hover {
+    background: #b832ff;
+    color: white;
+    box-shadow: 0 0 22px #b832ff;
+    transform: scale(1.05);
+}

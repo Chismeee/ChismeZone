@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Chismes</title>
+
+<style>
+  body {
+    margin: 0;
+    background: #0d0f15;
+    font-family: Arial, sans-serif;
+    color: #fff;
+  }
+
+  /* FORM */
+  .chisme-form {
+    display: flex;
+    gap: 10px;
+    padding: 15px;
+    background: #11131c;
+    border-top: 2px solid #ff2c7d;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .input-box {
+    padding: 10px;
+    border-radius: 10px;
+    background: #0b0d12;
+    border: 1px solid #7b2cbf;
+    color: white;
+  }
+
+  .xat-input { width: 150px; }
+  .chisme-input { width: 650px; height: 120px; font-size: 16px; }
+  .url-input { width: 230px; font-size: 12px; }
+
+  .add-screenshot {
+    width: 35px;
+    height: 35px;
+    border-radius: 8px;
+    border: none;
+    background: #ff2c7d;
+    font-size: 22px;
+    cursor: pointer;
+  }
+
+  .remove-cap {
+    width: 35px;
+    height: 35px;
+    border-radius: 8px;
+    border: none;
+    background: #333;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .add-btn {
+    padding: 10px 20px;
+    background: #ff2c7d;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+  }
+
+  h1 {
+    text-align: center;
+    margin-top: 20px;
+    color: #ff2ea6;
+    text-shadow: 0 0 12px #ff2ea6;
+  }
+
+  /* CARDS */
+  .chisme-card {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    background: radial-gradient(circle at top left, #1a1c25 0%, #0c0d12 100%);
+    border: 3px solid #ff2ea6;
+    border-radius: 25px;
+    box-shadow: 0 0 15px #ff2ea6, inset 0 0 10px #b832ff55;
+    padding: 20px;
+    margin: 18px;
+    transition: 0.25s ease-in-out;
+  }
+  .chisme-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 25px #ff2ea6, inset 0 0 15px #b832ff88;
+  }
+
+  .chisme-icon {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #ff2ea6, #b832ff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 46px;
+    color: white;
+    box-shadow: 0 0 18px #ff2ea6, inset 0 0 12px #ffffff44;
+  }
+
+  .chisme-texto {
+    flex: 1;
+    color: white;
+    font-size: 16px;
+    line-height: 1.4;
+  }
+
+  .chisme-texto strong {
+    color: #ff2ea6;
+    font-size: 17px;
+  }
+
+  .btn-ver {
+    background: transparent;
+    border: 3px solid #b832ff;
+    color: #b832ff;
+    padding: 14px 26px;
+    border-radius: 18px;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s ease;
+    box-shadow: 0 0 12px #b832ff55;
+  }
+
+  .btn-ver:hover {
+    background: #b832ff;
+    color: white;
+    box-shadow: 0 0 22px #b832ff;
+    transform: scale(1.05);
+  }
+
+  /* MODAL */
+  .modal-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .modal {
+    background: #11131c;
+    width: 480px;
+    padding: 20px;
+    border-radius: 15px;
+    border: 1px solid #ff2c7d;
+  }
+
+  .close-modal {
+    float: right;
+    cursor: pointer;
+    font-size: 22px;
+    color: #ff2c7d;
+  }
+
+  /* wrapper for capture input + remove button */
+  .capture-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+</style>
+</head>
+<body>
+
+<h1>😱🔥 Chisme del Día</h1>
+<div id="chismeDiaContainer"></div>
+
+<h1>📚 Chismes Antiguos</h1>
+<div id="listaChismes"></div>
+
+<!-- FORM -->
+<div class="chisme-form">
+  <input class="input-box xat-input" id="xat" placeholder="¿Chisme de cuál xat?">
+  <textarea class="input-box chisme-input" id="chisme" placeholder="Escribe tu chisme..."></textarea>
+
+  <div id="capturas-container" style="display:flex; gap:10px; flex-wrap:wrap;">
+    <!-- inputs serão criados dinamicamente -->
+  </div>
+
+  <button class="add-screenshot" id="add-cap">+</button>
+  <button class="add-btn" id="add">Añadir Chisme</button>
+</div>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modal">
+  <div class="modal">
+    <span class="close-modal" onclick="closeModal()">×</span>
+    <h3 id="modal-xat"></h3>
+    <p id="modal-chisme"></p>
+    <div id="modal-capturas"></div>
+  </div>
+</div>
+
+<script>
+/* ----------------------
+  Helpers: add/remove capture inputs
+------------------------*/
+const capturasContainer = document.getElementById("capturas-container");
+
+function addCaptureInput(value = "") {
+  const wrapper = document.createElement("div");
+  wrapper.className = "capture-row";
+
+  const input = document.createElement("input");
+  input.className = "input-box url-input";
+  input.placeholder = "URL de captura (opcional)";
+  input.value = value;
+
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "remove-cap";
+  btn.textContent = "−"; // menos
+  btn.title = "Remover captura";
+
+  btn.onclick = () => {
+    wrapper.remove();
+    // opcional: salvar estado imediatamente
+    salvar();
+  };
+
+  wrapper.appendChild(input);
+  wrapper.appendChild(btn);
+  capturasContainer.appendChild(wrapper);
+  return input;
+}
+
+/* ----------------------
+   LOCAL STORAGE
+------------------------*/
+function salvar() {
+  localStorage.setItem("chismeDia", document.getElementById("chismeDiaContainer").innerHTML);
+  localStorage.setItem("chismesAntigos", document.getElementById("listaChismes").innerHTML);
+
+  // também salvar as capturas do formulário (valores atuais)
+  const values = [...capturasContainer.querySelectorAll("input")].map(i => i.value);
+  localStorage.setItem("formCapturas", JSON.stringify(values));
+}
+
+function attachListeners() {
+  // re-anexar handlers de "Visualizar"
+  document.querySelectorAll(".btn-ver").forEach(btn => {
+    btn.onclick = () => {
+      const card = btn.closest(".chisme-card");
+      const strong = card.querySelector(".chisme-texto strong");
+      let xat = strong ? strong.textContent : "Xat desconocido";
+      // o texto do chisme: remover o primeiro strong do conteúdo
+      const textoEl = card.querySelector(".chisme-texto");
+      let texto = textoEl ? textoEl.innerText.replace(xat, "").trim() : "";
+      // tentaremos recuperar links dentro do card (se houver)
+      const links = [...card.querySelectorAll("a")].map(a => a.href);
+      openModal(xat, texto, links);
+    };
+  });
+
+  // re-anexar handlers para os botões de remover (quando carregamos HTML do localStorage)
+  document.querySelectorAll(".remove-cap").forEach(btn => {
+    // se o handler já existir, sobrescreve (ok)
+    btn.onclick = () => {
+      const wrapper = btn.closest(".capture-row");
+      if (wrapper) wrapper.remove();
+      salvar();
+    };
+  });
+}
+
+function carregar() {
+  const dia = localStorage.getItem("chismeDia");
+  const antigos = localStorage.getItem("chismesAntigos");
+
+  if (dia) document.getElementById("chismeDiaContainer").innerHTML = dia;
+  if (antigos) document.getElementById("listaChismes").innerHTML = antigos;
+
+  // restaurar inputs de captura do formulário (se existirem)
+  const savedCapturas = JSON.parse(localStorage.getItem("formCapturas") || "[]");
+  if (savedCapturas.length > 0) {
+    // limpa e recria
+    capturasContainer.innerHTML = "";
+    savedCapturas.forEach(v => addCaptureInput(v));
+  } else {
+    // se não havia nada salvo, cria um input inicial
+    if (capturasContainer.children.length === 0) addCaptureInput();
+  }
+
+  attachListeners();
+}
+
+carregar();
+
+/* ADICIONAR CAMPO DE CAPTURA */
+document.getElementById("add-cap").onclick = () => {
+  addCaptureInput();
+  salvar();
+};
+
+/* CRIAR CARD */
+function criarCard(xat, msg, capturas) {
+  let card = document.createElement("div");
+  card.className = "chisme-card";
+
+  // se houver capturas, adicionamos links escondidos dentro do card para que ao salvar no localStorage fiquem persistidos
+  const capturasHtml = (capturas && capturas.length)
+    ? capturas.map(url => `<a href="${escapeHtml(url)}" target="_blank" style="display:none">${escapeHtml(url)}</a>`).join("")
+    : "";
+
+  card.innerHTML = `
+    <div class="chisme-icon">💬</div>
+    <div class="chisme-texto">
+      <strong>${escapeHtml(xat) || "Xat desconocido"}</strong><br>
+      ${escapeHtml(msg.length > 80 ? msg.slice(0, 80) + "..." : msg)}
+      ${capturasHtml}
+    </div>
+    <button class="btn-ver">Visualizar</button>
+  `;
+
+  // anexa o handler diretamente (isso funciona sem dependência do attachListeners)
+  card.querySelector(".btn-ver").onclick = () => openModal(xat, msg, capturas);
+  return card;
+}
+
+/* ADICIONAR CHISME */
+document.getElementById("add").onclick = () => {
+  let xat = document.getElementById("xat").value;
+  let msg = document.getElementById("chisme").value;
+
+  if (msg.trim() === "") return alert("Escribe un chisme.");
+
+  const capturas = [...capturasContainer.querySelectorAll("input")]
+    .map(i => i.value)
+    .filter(v => v.trim() !== "");
+
+  let card = criarCard(xat, msg, capturas);
+
+  let atual = document.getElementById("chismeDiaContainer").firstChild;
+  if (atual) document.getElementById("listaChismes").prepend(atual);
+
+  document.getElementById("chismeDiaContainer").innerHTML = "";
+  document.getElementById("chismeDiaContainer").appendChild(card);
+
+  // limpa formulário (mas mantém pelo menos um campo de captura)
+  document.getElementById("xat").value = "";
+  document.getElementById("chisme").value = "";
+  capturasContainer.innerHTML = "";
+  addCaptureInput();
+
+  salvar();
+  attachListeners(); // re-anexa listeners caso precise
+};
+
+/* MODAL */
+function openModal(xat, chisme, capturas) {
+  document.getElementById("modal-xat").textContent = "Xat: " + (xat || "Xat desconocido");
+  document.getElementById("modal-chisme").textContent = chisme;
+
+  let area = document.getElementById("modal-capturas");
+  area.innerHTML = "";
+
+  // se não vierem capturas pela criação, tente extraí-las do HTML do card (caso carregado do storage)
+  if ((!capturas || capturas.length === 0) && window.event) {
+    // tentativa alternativa: nada complexo aqui; normalmente os capturas são passados
+  }
+
+  if (!capturas || capturas.length === 0) {
+    area.innerHTML = "<em style='color:#ff2c7d'>Sin capturas</em>";
+  } else {
+    capturas.forEach(url => {
+      const a = document.createElement("a");
+      a.href = url;
+      a.target = "_blank";
+      a.textContent = url;
+      a.style.color = "#ff2c7d";
+      a.style.display = "block";
+      area.appendChild(a);
+    });
+  }
+
+  document.getElementById("modal").style.display = "flex";
+}
+
+function closeModal() {
+  document.getElementById("modal").style.display = "none";
+}
+
+/* small helper to avoid injection when inserindo HTML de capturas no card */
+function escapeHtml(str) {
+  if (!str) return "";
+  return String(str)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+</script>
+
+</body>
+</html>
